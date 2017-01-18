@@ -3,11 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Post extends Model
 {
-    protected $fillable = [
-        'title',
-        'content',
-    ];
+    use LogsActivity;
+
+    protected $fillable = [ 'title', 'content' ];
+
+    protected static $logAttributes = [ 'title', 'content' ];
 }

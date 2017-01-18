@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <a class="btn btn-success" href="{{ route('post.create') }}">NEW POST</a>
+    <a class="btn btn-info" href="{{ URL::to('/log') }}">LOG</a>
     <hr>
     <div class="row">
         @if(count($posts) > 0)
@@ -12,7 +13,7 @@
                     <div class="panel-heading">
                         <p>{{ $post->title }}
                             <a class="pull-right" href="{{ route('post.edit', $post->id) }}">EDIT</a>
-                            <span class="pull-right clickable delete" data-url="{{ route('post.destroy', $post->id) }}"> X </span> 
+                            <span class="pull-right clickable delete" data-url="{{ route('post.destroy', $post->id) }}"> X </span>
                         </p>
                     </div>
 
