@@ -13,5 +13,6 @@ class ActivityLogController extends Controller
         $data['activities'] = Activity::all();
 
         return view('log', $data);
+        // return response()->json(Activity::all()->get(0)->changes['attributes']['title']);
     }
 }

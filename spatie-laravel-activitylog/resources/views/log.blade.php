@@ -13,10 +13,17 @@
                 <div class="panel-body">
                     <div class="well">
                         @foreach ($activities as $activity)
-                            <p>{{ $activity->causer->name }} <br>
-                                Action: {{ $activity->description }}  <br>
-                                Title: {{ $activity->subject->title }} <br>
-                                Content: {{ $activity->subject->content }}</p>
+                            @if ($activity->description === 'updated')
+                                <p>[{{ $activity->description }}] <br>
+                                    User: {{ $activity->causer->name }} {{ $activity->description }} title from {{ $activity->changes['old']['title'] }} to {{ $activity->changes['attributes']['title'] }} <br>
+                                    updated content from {{ $activity->changes['old']['content'] }} to {{ $activity->changes['attributes']['content'] }} <br>
+                                </p>
+                            @else
+                                <p>[{{ $activity->description }}] <br>
+                                    User {{ $activity->causer->name }} {{ $activity->description }} Post: {{ $activity->changes['attributes']['title'] }} <br>
+                                    Content: {{ $activity->changes['attributes']['content'] }} <br>
+                                </p>
+                            @endif
                         @endforeach
                     </div>
                 </div>
