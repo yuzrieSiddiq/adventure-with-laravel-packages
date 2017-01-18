@@ -83,5 +83,6 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    @yield('extra_js')
 </body>
 </html>
