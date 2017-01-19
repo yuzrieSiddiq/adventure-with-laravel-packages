@@ -20,3 +20,13 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::get('/log', 'ActivityLogController@index');
 Route::resource('post', 'PostController');
+
+Route::get('generatehelloworld', [
+    'as'   => 'report.generatehelloworld',
+    'uses' => 'ReportingController@genHelloWorld']);
+Route::get('generateuserschart', [
+    'as'   => 'report.generateuserschart',
+    'uses' => 'ReportingController@genUsersChart']);
+Route::get('generateuserstable', [
+    'as'   => 'report.generateuserstable',
+    'uses' => 'ReportingController@genUsersTable']);
