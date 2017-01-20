@@ -22,11 +22,11 @@ Route::get('/log', 'ActivityLogController@index');
 Route::resource('post', 'PostController');
 
 Route::get('generatehelloworld', [
-    'as'   => 'report.generatehelloworld',
-    'uses' => 'ReportingController@genHelloWorld']);
+    'as'   => 'report.generatepermissionsreport',
+    'uses' => 'ReportingController@genPermissionsReport']);
 Route::get('generateuserschart', [
-    'as'   => 'report.generateuserschart',
-    'uses' => 'ReportingController@genUsersChart']);
+    'as'   => 'report.generateusersreport',
+    'uses' => 'ReportingController@genUsersReport']);
 Route::get('generateuserstable', [
-    'as'   => 'report.generateuserstable',
-    'uses' => 'ReportingController@genUsersTable']);
+    'as'   => 'report.generaterolesreport',
+    'uses' => 'ReportingController@genRolesReport']);

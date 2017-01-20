@@ -18,9 +18,9 @@
                     <h3>Generate Reports</h3>
                 </div>
                 <div class="panel-body">
-                    <a class="btn btn-primary" href="{{ route('report.generatehelloworld') }}">Hello World</a>
-                    <a class="btn btn-primary" href="{{ route('report.generateuserstable') }}">Users Table</a>
-                    <a class="btn btn-primary" href="{{ route('report.generateuserschart') }}">Users Chart</a>
+                    <a class="btn btn-primary" href="{{ route('report.generatepermissionsreport') }}">Permissions</a>
+                    <a class="btn btn-primary" href="{{ route('report.generateusersreport') }}">Users</a>
+                    <a class="btn btn-primary" href="{{ route('report.generaterolesreport') }}">Roles</a>
                 </div>
             </div>
         </div>
