@@ -23,6 +23,15 @@
                     <a class="btn btn-primary" href="{{ route('report.generaterolesreport') }}">Roles</a>
                 </div>
             </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3>Generate Reports With Chart</h3>
+                </div>
+                <div class="panel-body">
+                    <a class="btn btn-primary" href="{{ route('report.generateuserswithchart') }}">Users</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

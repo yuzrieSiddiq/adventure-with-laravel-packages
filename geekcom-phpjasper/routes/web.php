@@ -21,12 +21,15 @@ Route::get('/home', 'HomeController@index');
 Route::get('/log', 'ActivityLogController@index');
 Route::resource('post', 'PostController');
 
-Route::get('generatehelloworld', [
+Route::get('generatepermissionsreport', [
     'as'   => 'report.generatepermissionsreport',
     'uses' => 'ReportingController@genPermissionsReport']);
-Route::get('generateuserschart', [
+Route::get('generateusersreport', [
     'as'   => 'report.generateusersreport',
     'uses' => 'ReportingController@genUsersReport']);
-Route::get('generateuserstable', [
+Route::get('generaterolesreport', [
     'as'   => 'report.generaterolesreport',
     'uses' => 'ReportingController@genRolesReport']);
+Route::get('generateuserschart', [
+    'as'   => 'report.generateuserswithchart',
+    'uses' => 'ReportingController@genUsersReportWithChart']);

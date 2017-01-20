@@ -79,6 +79,28 @@ class ReportingController extends Controller
         Self::get_headers($output, $output_filename, $format);
     }
 
+    public function genUsersReportWithChart()
+    {
+        $jasper = new JasperPHP;
+
+        $input_jrxml = public_path() . '/report/users_charts.jrxml';
+        $jasper->compile($input_jrxml)->execute();
+
+        // process parameters
+        $input  = public_path() . '/report/users_charts.jasper';
+        $output = public_path() . '/report/users_charts';
+        $format = 'pdf';
+        $param  = [];
+        $env = Self::get_env();
+        $locale = 'en';
+
+        $jasper->process( $input, $output, $format, $param, $env, $locale)->execute();
+        $output_filename = 'Users_With_Report';
+
+        // generate the download
+        Self::get_headers($output, $output_filename, $format);
+    }
+
     public function genRolesReport()
     {
         $jasper = new JasperPHP;
