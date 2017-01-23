@@ -11,7 +11,15 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
 ## Getting Started
-Do not forget to do `cp .env .env.testing` before you run the test
+- Do not forget to do `cp .env .env.testing` before you run the test
+Use `composer exec` instead of `php`. For example:
+```
+php codecept generate:test unit Example
+```
+should be
+```
+composer exec codecept generate:test unit Example
+```
 
 ## Official Documentation
 
