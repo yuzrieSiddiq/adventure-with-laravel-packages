@@ -25,7 +25,8 @@
 
                         {{-- Process Button --}}
                         <div class="form-group">
-                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-xlsx" disabled>PROCESS</button>
+                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-xlsx" disabled
+                                data-toggle="modal" data-target="#processXLSX">PROCESS</button>
                         </div>
                     </div>
                 </div>
@@ -43,7 +44,8 @@
 
                         {{-- Process Button --}}
                         <div class="form-group">
-                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-xls" disabled>PROCESS</button>
+                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-xls" disabled
+                                data-toggle="modal" data-target="#processXLS">PROCESS</button>
                         </div>
                     </div>
                 </div>
@@ -61,14 +63,135 @@
 
                         {{-- Process Button --}}
                         <div class="form-group">
-                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-csv" disabled>PROCESS</button>
+                            <button class="col-md-3 pull-right btn btn-small btn-info" id="process-csv" disabled
+                                data-toggle="modal" data-target="#processCSV">PROCESS</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Modal: Data Processing -->
+    <div class="modal fade" id="processXLSX" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Process Timetable XLSX</h3>
+                </div>
+
+                <form class="form" method="POST">
+                    <div class="modal-body">
+                        <table class="table table-striped attendance_table">
+                            <thead>
+                                <th>Student ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nationality</th>
+                            </thead>
+                            <!-- template row to be populated based on the input from the file -->
+                            <tr class="tr_template hidden">
+                                <td class="studentid">Student ID</td>
+                                <td class="firstname">First Name</td>
+                                <td class="lastname">Last Name</td>
+                                <td class="nationality">Nationality</td>
+                            </tr>
+                        </table>
+                    </div> <!-- end modal-body -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success pull-right" id="uploadXLSX"
+                            data-method="POST" data-url="{{ route('timetable.xlsx') }}">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+
+            </div> <!-- end. modal-content-->
+        </div> <!-- end .modal-dialog -->
+    </div> <!-- end .modal fade -->
+    {{-- end #processXLSX --}}
+
+    <!-- Modal: Data Processing -->
+    <div class="modal fade" id="processXLS" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Process Timetable XLS</h3>
+                </div>
+
+                <form class="form" method="POST">
+                    <div class="modal-body">
+                        <table class="table table-striped attendance_table">
+                            <thead>
+                                <th>Student ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nationality</th>
+                            </thead>
+                            <!-- template row to be populated based on the input from the file -->
+                            <tr class="tr_template hidden">
+                                <td class="studentid">Student ID</td>
+                                <td class="firstname">First Name</td>
+                                <td class="lastname">Last Name</td>
+                                <td class="nationality">Nationality</td>
+                            </tr>
+                        </table>
+                    </div> <!-- end modal-body -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success pull-right" id="uploadXLS"
+                            data-method="POST" data-url="{{ route('timetable.xls') }}">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+
+            </div> <!-- end. modal-content-->
+        </div> <!-- end .modal-dialog -->
+    </div> <!-- end .modal fade -->
+    {{-- end #processXLSX --}}
+
+    <!-- Modal: Data Processing -->
+    <div class="modal fade" id="processCSV" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Process Timetable CSV</h3>
+                </div>
+
+                <form class="form" method="POST">
+                    <div class="modal-body">
+                        <table class="table table-striped attendance_table">
+                            <thead>
+                                <th>Student ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Nationality</th>
+                            </thead>
+                            <!-- template row to be populated based on the input from the file -->
+                            <tr class="tr_template hidden">
+                                <td class="studentid">Student ID</td>
+                                <td class="firstname">First Name</td>
+                                <td class="lastname">Last Name</td>
+                                <td class="nationality">Nationality</td>
+                            </tr>
+                        </table>
+                    </div> <!-- end modal-body -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success pull-right" id="uploadCSV"
+                            data-method="POST" data-url="{{ route('timetable.csv') }}">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+
+            </div> <!-- end. modal-content-->
+        </div> <!-- end .modal-dialog -->
+    </div> <!-- end .modal fade -->
+    {{-- end #processXLSX --}}
+</div> {{-- .container --}}
 @endsection
 
 @section('extra_js')
