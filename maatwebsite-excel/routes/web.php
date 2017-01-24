@@ -20,3 +20,17 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::get('/log', 'ActivityLogController@index');
 Route::resource('post', 'PostController');
+
+# Upload timetable routes
+Route::post('/timetable/xlsx', [
+    'as'   => 'timetable.xlsx',
+    'uses' => 'TimetableImportController@importXLSX'
+]);
+Route::post('/timetable/xls', [
+    'as'   => 'timetable.xls',
+    'uses' => 'TimetableImportController@importXLS'
+]);
+Route::post('/timetable/csv', [
+    'as'   => 'timetable.csv',
+    'uses' => 'TimetableImportController@importCSV'
+]);
