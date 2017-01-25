@@ -195,17 +195,86 @@
 @endsection
 
 @section('extra_js')
+<script src="{{ asset('js/xlsx.min.js') }}"></script>
 <script>
+/**
+ * The uploading works from bottom to top. Follow the numbers in each
+ * comments before the function definitions
+ */
 (function() {
     let input_xlsx = $('#xlsx').val()
     let input_xls  = $('#xls').val()
     let input_csv  = $('#csv').val()
 
     $('#xlsx').change(function() {
-        $('#process-xlsx').attr('disabled', false)
 
-        $('#process-xlsx').click(function () {
-            console.log($('#xlsx').val())
+        // STEP 4: Populate the tr_templates
+        let fillModalTable = function(row, headers) {
+            let tr_template = $('#processXLSX').find('.attendance_table').find('.tr_template')
+            let tr = tr_template.clone()
+            tr.removeClass('tr_template hidden')
+            tr.children('td.studentid').html(row[headers.A])
+            tr.children('td.firstname').html(row[headers.B])
+            tr.children('td.lastname').html(row[headers.C])
+            tr.children('td.nationality').html(row[headers.D])
+            $('#processXLSX').find('.attendance_table').append(tr)
+        }
+
+        // STEP 3: to JSON Array
+        let to_json_array = function(workbook) {
+            let results = {}
+            // for (Type SheetNames as SheetName) : in most cases only one but they may separate the data in few sheets
+            workbook.SheetNames.forEach(function (SheetName) {
+                let worksheet = workbook.Sheets[SheetName]      // select sheet
+                let headers   = {}                              // select headers
+                let data      = []                              // store the data
+
+                // get the row object array - data in every row of selected sheet if not empty
+                let sheetobject = XLSX.utils.sheet_to_row_object_array(worksheet)
+                if (sheetobject.length > 0) results[SheetName] = sheetobject
+
+                // go through each row and find from where to start processing the table
+                for (cell in worksheet) {
+                    let col = cell.substring(0,1)
+                    let row = parseInt(cell.substring(1))
+                    let val = worksheet[cell].v
+
+                    // ADVANCED FUNCTIONALITIES: Parse From Certain Rows and Cells Only
+                    // Customize the headers
+                    if (row == 7) headers[col] = val
+
+                    if (!data[row]) data[row] = {}
+                    data[row][headers[col]] = val
+                }
+                // skip first 6 cells (the class information) - also skip the headers
+                for (let i = 0; i < 8; i++) data.shift()
+
+                // populate the tr_templates
+                data.forEach(function(row) {
+                    fillModalTable(row, headers)
+                })
+            })
+        }
+
+        // STEP 2: Process the workbook into JSON format
+        let process_workbook = function(workbook) {
+            let jsonstring = JSON.stringify(to_json_array(workbook))
+        }
+
+        // STEP 1: Upload, read file and enable process button
+        let file = document.querySelector('#xlsx').files[0]     // 1. upload
+        let reader = new FileReader()
+        reader.onload = function(event) {
+            let data = event.target.result                      // 2. read file content
+            let workbook = XLSX.read(data, {type: 'binary'})    // 3. parse XLSX workbook
+            process_workbook(workbook)                          // 4. process - STEP 2
+        }
+        reader.readAsBinaryString(file)
+
+        $('#process-xlsx').attr('disabled', false)              // 5. enable button
+
+        $('#uploadXLSX').click(function () {
+            console.log(tr_template)
         })
     })
 
