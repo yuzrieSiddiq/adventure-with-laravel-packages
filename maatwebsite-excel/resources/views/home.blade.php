@@ -81,25 +81,22 @@
                     <h3 class="modal-title">Process Timetable XLSX</h3>
                 </div>
 
-                <form class="form" method="POST">
-                    {{-- modal-body taken over by table --}}
-                    <div class="table-responsive">
-                        <table class="table table-striped attendance_table">
-                            <thead class="table_head">
-                                <tr class="th_template hidden"></tr>
-                            </thead>
-                            <!-- template row to be populated based on the input from the file -->
-                            <tr class="tr_template hidden"></tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
+                {{-- modal-body taken over by table --}}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover attendance_table">
+                        <thead class="table_head">
+                            <tr class="th_template hidden"></tr>
+                        </thead>
+                        <!-- template row to be populated based on the input from the file -->
+                        <tr class="tr_template hidden"></tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
                         <button type="submit" class="btn btn-success pull-right" id="uploadXLSX"
-                            data-method="POST" data-url="{{ route('timetable.xlsx') }}">
-                            Upload
-                        </button>
-                    </div>
-                </form>
-
+                        data-method="POST" data-url="{{ route('timetable.xlsx') }}">
+                        Upload
+                    </button>
+                </div>
             </div> <!-- end. modal-content-->
         </div> <!-- end .modal-dialog -->
     </div> <!-- end .modal fade -->
@@ -195,6 +192,11 @@
  * comments before the function definitions
  */
 (function() {
+    // Get CSRF token
+    let getToken = function() {
+        return $('meta[name=csrf-token]').attr('content')
+    }
+
     let input_xlsx = $('#xlsx').val()
     let input_xls  = $('#xls').val()
     let input_csv  = $('#csv').val()
@@ -264,7 +266,6 @@
                     data[row][headers[col]] = val
                 }
                 headers.length = count                          // get length of the headers
-                headers.chr    = ""                             // store string
 
                 // skip first 6 cells (the class information) - also skip the headers
                 for (let i = 0; i < 8; i++) data.shift()
@@ -274,12 +275,14 @@
                 data.forEach(function(row) {
                     fillModalTable(row, headers)
                 })
+                setHeaders(headers)
+                setData(data)
             })
         }
 
         // STEP 2: Process the workbook into JSON format
         let process_workbook = function(workbook) {
-            let jsonstring = JSON.stringify(to_json_array(workbook))
+            let workbook_json = JSON.stringify(to_json_array(workbook))
         }
 
         // STEP 1: Upload, read file and enable process button
@@ -295,10 +298,49 @@
         $('#process-xlsx').attr('disabled', false)              // 5. enable button
 
         $('#uploadXLSX').click(function () {
-            console.log(tr_template)
+            let xlsx_data = {
+                '_token': getToken(),
+                'data'  : getData(),
+                'header': getHeaders()
+            }
+
+            $.ajax({
+                'url': '{{ route('timetable.xlsx') }}',
+                'method': 'POST',
+                'data': xlsx_data,
+                'enctype': 'multipart/form-data'
+            }).done(function() {
+                // window.location.reload()
+                clearTheFile()
+                clearTheProcess()
+            })
         })
     })
 
+    let clearTheFile = function() {
+        let input = $('#xlsx')
+        input.replaceWith(input.val('').clone())
+        $('#process-xlsx').attr('disabled', true)
+    }
+
+    let clearTheProcess = function() {
+        emptyData = []
+        emptyHeader = {}
+
+        setData(emptyData)
+        setHeaders(emptyHeader)
+    }
+
+    // getters and setters
+    let table_headers = {}
+    let setHeaders = function(headers) { table_headers = headers}
+    let getHeaders = function() { return table_headers }
+
+    let table_data    = []
+    let setData = function(data) { table_data = data }
+    let getData = function() { return table_data }
+
+    // NOTE: NOT IMPLEMENTED EH
     $('#xls').change(function() {
         $('#process-xls').attr('disabled', false)
 
