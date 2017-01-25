@@ -74,7 +74,7 @@
 
     <!-- Modal: Data Processing -->
     <div class="modal fade" id="processXLSX" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-attendance">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -82,23 +82,16 @@
                 </div>
 
                 <form class="form" method="POST">
-                    <div class="modal-body">
+                    {{-- modal-body taken over by table --}}
+                    <div class="table-responsive">
                         <table class="table table-striped attendance_table">
-                            <thead>
-                                <th>Student ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Nationality</th>
+                            <thead class="table_head">
+                                <tr class="th_template hidden"></tr>
                             </thead>
                             <!-- template row to be populated based on the input from the file -->
-                            <tr class="tr_template hidden">
-                                <td class="studentid">Student ID</td>
-                                <td class="firstname">First Name</td>
-                                <td class="lastname">Last Name</td>
-                                <td class="nationality">Nationality</td>
-                            </tr>
+                            <tr class="tr_template hidden"></tr>
                         </table>
-                    </div> <!-- end modal-body -->
+                    </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success pull-right" id="uploadXLSX"
                             data-method="POST" data-url="{{ route('timetable.xlsx') }}">
@@ -124,7 +117,7 @@
                 <form class="form" method="POST">
                     <div class="modal-body">
                         <table class="table table-striped attendance_table">
-                            <thead>
+                            <thead class="table_head">
                                 <th>Student ID</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
@@ -164,7 +157,7 @@
                 <form class="form" method="POST">
                     <div class="modal-body">
                         <table class="table table-striped attendance_table">
-                            <thead>
+                            <thead class="table_head">
                                 <th>Student ID</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
@@ -208,16 +201,36 @@
 
     $('#xlsx').change(function() {
 
-        // STEP 4: Populate the tr_templates
+        // STEP 5: Populate the tr_templates
         let fillModalTable = function(row, headers) {
             let tr_template = $('#processXLSX').find('.attendance_table').find('.tr_template')
             let tr = tr_template.clone()
             tr.removeClass('tr_template hidden')
-            tr.children('td.studentid').html(row[headers.A])
-            tr.children('td.firstname').html(row[headers.B])
-            tr.children('td.lastname').html(row[headers.C])
-            tr.children('td.nationality').html(row[headers.D])
+            for (let i = 0; i < headers.length; i++) {
+                // convert numbers to alphabets and set it to empty if undefined
+                let chr = String.fromCharCode(65 + i);
+                if (row[headers[chr]] == undefined) row[headers[chr]] = ""
+                let new_td = "<td class=" + headers[chr] + ">" + row[headers[chr]] + "</td>"
+                tr.append(new_td)
+            }
+
+
             $('#processXLSX').find('.attendance_table').append(tr)
+        }
+
+        // STEP 4: Populate the thead
+        let fillModalTableHeader = function (headers) {
+            let th_template = $('#processXLSX').find('.attendance_table').find('.th_template')
+            th = th_template.clone()
+            th.removeClass('th_template hidden')
+
+            for (let i = 0; i < headers.length; i++) {
+                // convert numbers to alphabets and set it to empty if undefined
+                let chr = String.fromCharCode(65 + i);
+                let new_th = "<th class=" + headers[chr] + ">" + headers[chr] + "</th>"
+                th.append(new_th)
+            }
+            $('#processXLSX').find('.attendance_table').find('.table_head').append(th)
         }
 
         // STEP 3: to JSON Array
@@ -228,6 +241,7 @@
                 let worksheet = workbook.Sheets[SheetName]      // select sheet
                 let headers   = {}                              // select headers
                 let data      = []                              // store the data
+                let count     = 0                               // store the headers length
 
                 // get the row object array - data in every row of selected sheet if not empty
                 let sheetobject = XLSX.utils.sheet_to_row_object_array(worksheet)
@@ -241,14 +255,21 @@
 
                     // ADVANCED FUNCTIONALITIES: Parse From Certain Rows and Cells Only
                     // Customize the headers
-                    if (row == 7) headers[col] = val
+                    if (row == 7) {
+                        headers[col] = val
+                        count++
+                    }
 
                     if (!data[row]) data[row] = {}
                     data[row][headers[col]] = val
                 }
+                headers.length = count                          // get length of the headers
+                headers.chr    = ""                             // store string
+
                 // skip first 6 cells (the class information) - also skip the headers
                 for (let i = 0; i < 8; i++) data.shift()
 
+                fillModalTableHeader(headers)
                 // populate the tr_templates
                 data.forEach(function(row) {
                     fillModalTable(row, headers)
