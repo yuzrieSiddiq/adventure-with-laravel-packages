@@ -14,6 +14,10 @@ const elixir = require('laravel-elixir');
  */
 
 elixir(mix => {
+    // gulp css
     mix.sass('app.scss')
-    //    .webpack('app.js');
+
+    // import XLSX library
+    const xlsxPath = './node_modules/xlsx/dist/'
+    mix.copy(xlsxPath + 'xlsx.full.min.js', 'public/js/xlsx.min.js');
 });
